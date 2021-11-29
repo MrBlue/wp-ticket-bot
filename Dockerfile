@@ -1,9 +1,15 @@
-FROM node:16
+FROM node:16.11.1-buster-slim
 
 WORKDIR /usr/src/app
-COPY package*.json ./
 
-RUN npm i --production
+ENV NODE_ENV production
+
+COPY package*.json ./
+RUN npm ci --production
 
 COPY . .
-CMD ["npm", "start"]
+
+RUN chown node:node /usr/src/app
+USER node
+
+CMD ["node", "."]
